@@ -145,18 +145,39 @@ npm run dev
 
 Open the printed local URL (usually `http://localhost:5173`) — you'll land on a login/signup screen.
 
-## How It All Connects
-Browser (React frontend)
-      │
-      │  fetch() calls with a JWT token
-      ▼
-Express API (backend/server.js)
-      │
-      │  Mongoose queries
-      ▼
-MongoDB Atlas (cloud database)
+## 🔄 How It All Connects
 
-Every note action (add, edit, delete, checklist toggle) sends a request from the frontend to the backend, which checks your login token, then reads/writes to MongoDB. Nothing is saved in the browser anymore except your login token and a few UI preferences (theme, selected country).
+```text
+React Frontend (Browser)
+          │
+          ▼
+fetch() + JWT Token
+          │
+          ▼
+Express API (Node.js)
+          │
+          ▼
+Authentication Middleware
+          │
+          ▼
+Controllers
+          │
+          ▼
+Mongoose Models
+          │
+          ▼
+MongoDB Atlas Database
+```
+
+Every note action (create, edit, delete, checklist toggle) follows this flow:
+
+1. The React frontend sends an authenticated request.
+2. Express verifies the JWT token.
+3. The controller processes the request.
+4. Mongoose reads or updates MongoDB Atlas.
+5. The updated data is returned to the frontend.
+
+Only the login token and UI preferences (theme, selected country) are stored in the browser.
 
 ## Good to Know
 
