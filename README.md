@@ -147,13 +147,13 @@ Open the printed local URL (usually `http://localhost:5173`) — you'll land on 
 
 ## How It All Connects
 Browser (React frontend)
-│
-│  fetch() calls with a JWT token
-▼
+      │
+      │  fetch() calls with a JWT token
+      ▼
 Express API (backend/server.js)
-│
-│  Mongoose queries
-▼
+      │
+      │  Mongoose queries
+      ▼
 MongoDB Atlas (cloud database)
 
 Every note action (add, edit, delete, checklist toggle) sends a request from the frontend to the backend, which checks your login token, then reads/writes to MongoDB. Nothing is saved in the browser anymore except your login token and a few UI preferences (theme, selected country).
