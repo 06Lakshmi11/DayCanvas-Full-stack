@@ -33,35 +33,35 @@ This repository contains **both halves** of the project:
 - `frontend/` — the React app users interact with
 - `backend/` — the Node.js/Express API and MongoDB database that stores everything
 
-## Repository Structure
+## 📁 Repository Structure
 
-DayCanvas-FullStack/
-├── frontend/                # React + Vite app
-│   ├── src/
-│   │   ├── components/
-│   │   ├── utils/
+```text
+DayCanvas-FullStack
+├── frontend
+│   ├── src
+│   │   ├── components
+│   │   ├── pages
+│   │   ├── hooks
+│   │   ├── utils
+│   │   ├── assets
 │   │   ├── App.jsx
-│   │   └── App.css
+│   │   └── main.jsx
+│   ├── public
 │   ├── package.json
 │   └── vite.config.js
 │
-├── backend/                 # Node.js + Express API
-│   ├── config/
-│   │   └── db.js
-│   ├── models/
-│   │   ├── User.js
-│   │   └── Note.js
-│   ├── controllers/
-│   │   ├── authController.js
-│   │   └── noteController.js
-│   ├── routes/
-│   │   ├── authRoutes.js
-│   │   └── noteRoutes.js
+├── backend
+│   ├── config
+│   ├── controllers
+│   ├── middleware
+│   ├── models
+│   ├── routes
+│   ├── utils
 │   ├── server.js
 │   └── package.json
 │
-└── README.md                 # you are here
-
+└── README.md
+```
 ## Features
 
 - 🗓️ Month-view calendar with prev/next/today navigation and instant year/month jump
