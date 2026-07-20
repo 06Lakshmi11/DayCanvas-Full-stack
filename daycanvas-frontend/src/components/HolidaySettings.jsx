@@ -1,64 +1,43 @@
-const CACHE_PREFIX = 'calendar-notes:holidays:'
-const API_KEY = import.meta.env.VITE_CALENDARIFIC_KEY
+import { COUNTRIES } from '../utils/holidays.js'
 
-export const COUNTRIES = [
-  { code: 'IN', name: 'India' },
-  { code: 'US', name: 'United States' },
-  { code: 'GB', name: 'United Kingdom' },
-  { code: 'AU', name: 'Australia' },
-  { code: 'CA', name: 'Canada' },
-  { code: 'DE', name: 'Germany' },
-  { code: 'FR', name: 'France' },
-  { code: 'JP', name: 'Japan' },
-  { code: 'SG', name: 'Singapore' },
-  { code: 'AE', name: 'United Arab Emirates' },
-  { code: 'BR', name: 'Brazil' },
-  { code: 'ZA', name: 'South Africa' },
-]
+export default function HolidaySettings({ country, onCountryChange, show, onToggleShow, status }) {
+  const countryName = COUNTRIES.find((c) => c.code === country)?.name || country
 
-/**
- * Fetches public holidays for a given year and country using the
- * Calendarific API, caching results in localStorage so repeat visits
- * don't re-fetch (also helps stay under the free tier's request limit).
- *
- * @param {number} year
- * @param {string} countryCode - ISO 3166-1 alpha-2, e.g. 'IN', 'US'
- * @returns {Promise<{date: string, name: string}[]>}
- */
-export async function fetchHolidays(year, countryCode) {
-  const cacheKey = `${CACHE_PREFIX}${countryCode}:${year}`
+  return (
+    <div className="holiday-settings">
+      <div className="holiday-settings-row">
+        <label className="holiday-toggle">
+          <input
+            type="checkbox"
+            checked={show}
+            onChange={(e) => onToggleShow(e.target.checked)}
+          />
+          Show holidays
+        </label>
+        <select
+          value={country}
+          onChange={(e) => onCountryChange(e.target.value)}
+          disabled={!show}
+          aria-label="Holiday country"
+        >
+          {COUNTRIES.map((c) => (
+            <option key={c.code} value={c.code}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
-  try {
-    const cached = localStorage.getItem(cacheKey)
-    if (cached) return JSON.parse(cached)
-  } catch {
-    // ignore cache read errors, fall through to fetch
-  }
-
-  if (!API_KEY) {
-    throw new Error('Missing Calendarific API key (VITE_CALENDARIFIC_KEY).')
-  }
-
-  const response = await fetch(
-    `https://calendarific.com/api/v2/holidays?api_key=${API_KEY}&country=${countryCode}&year=${year}`,
+      {show && status === 'empty' && (
+        <p className="holiday-status holiday-status--warn">
+          No holiday data available for {countryName}.
+        </p>
+      )}
+      {show && status === 'error' && (
+        <p className="holiday-status holiday-status--warn">
+          Couldn't reach the holiday service — check your connection.
+        </p>
+      )}
+    </div>
   )
-  const data = await response.json()
-
-  if (!response.ok || data?.meta?.code !== 200) {
-    throw new Error(data?.meta?.error_detail || `Could not load holidays for ${countryCode} ${year}`)
-  }
-
-  const rawHolidays = data?.response?.holidays || []
-  const holidays = rawHolidays.map((h) => ({
-    date: h.date.iso.slice(0, 10), // "2026-01-01"
-    name: h.name,
-  }))
-
-  try {
-    localStorage.setItem(cacheKey, JSON.stringify(holidays))
-  } catch {
-    // storage full or unavailable — non-fatal, just won't be cached
-  }
-
-  return holidays
 }
