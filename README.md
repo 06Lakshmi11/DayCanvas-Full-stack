@@ -7,6 +7,21 @@
 
 *A quiet place for daily notes — a calendar you can actually write on, now synced across every device you log into.*
 
+### 🚀 Live Frontend
+
+The app is deployed and accessible at:
+
+🔗 [https://day-canvas-full-stack.vercel.app](https://day-canvas-full-stack.vercel.app)
+
+---
+
+### 🛠️ Live Backend API
+
+The backend is deployed and accessible at *(hosted on Render — may take 30-50 seconds to wake up on first request after inactivity)*:
+
+🔗 [https://daycanvas-full-stack-1.onrender.com](https://daycanvas-full-stack-1.onrender.com)
+
+---
 Author — **Lakshmi Valmiki**
 
 ## Table of Contents
