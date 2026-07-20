@@ -1,3 +1,4 @@
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 const CACHE_PREFIX = 'calendar-notes:holidays:'
 
 export const COUNTRIES = [
@@ -22,30 +23,22 @@ export async function fetchHolidays(year, countryCode) {
     const cached = localStorage.getItem(cacheKey)
     if (cached) return JSON.parse(cached)
   } catch {
-    // Ignore cache errors
+    // ignore cache read errors
   }
 
-  const API_KEY = import.meta.env.VITE_CALENDARIFIC_API_KEY
-
-  const response = await fetch(
-    `https://calendarific.com/api/v2/holidays?api_key=${API_KEY}&country=${countryCode}&year=${year}`
-  )
-
-  if (!response.ok) {
-    throw new Error(`Could not load holidays for ${countryCode}`)
-  }
-
+  const response = await fetch(`${API_BASE}/holidays?country=${countryCode}&year=${year}`)
   const data = await response.json()
 
-  const holidays = (data.response?.holidays || []).map((holiday) => ({
-    date: holiday.date.iso,
-    name: holiday.name,
-  }))
+  if (!response.ok) {
+    throw new Error(data?.message || `Could not load holidays for ${countryCode} ${year}`)
+  }
+
+  const holidays = data.holidays || []
 
   try {
     localStorage.setItem(cacheKey, JSON.stringify(holidays))
   } catch {
-    // Ignore cache write errors
+    // storage full or unavailable
   }
 
   return holidays

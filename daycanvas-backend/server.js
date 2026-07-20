@@ -4,6 +4,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const noteRoutes = require("./routes/noteRoutes");
+const holidayRoutes = require("./routes/holidayRoutes");
 
 const app = express();
 
@@ -22,7 +23,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", noteRoutes);
-
+app.use("/api/holidays", holidayRoutes);
 // ---------- 404 fallback ----------
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found." });
